@@ -43,6 +43,7 @@ def plotTwoFeatures(X,T,pred_func):
         T=T.argmax(0)
         
     # Plot the contour and training examples
+    plt.ion()
     plt.contourf(xs, ys, Z, cmap=plt.cm.Spectral)
     plt.scatter(X[0,:], X[1,:], c=T, s=50,
             cmap=colors.ListedColormap(['orange', 'blue', 'green']))
