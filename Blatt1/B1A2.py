@@ -9,9 +9,10 @@ iris = np.loadtxt(fname="iris.csv", delimiter=",")
 # c)
 X = iris[:, :-1]
 T = iris[:, -1]
-print(T)
+print(T.shape)
 # d)
 X = X.T
+print(X.shape)
 print(X[:, 1])
 
 

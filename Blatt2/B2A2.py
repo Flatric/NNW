@@ -33,13 +33,15 @@ class SNL:
             delta_w = 1 / X.shape[1] * summe
 
             self._b += delta_w
-            if i % 50 == 0:
+            if i % 5 == 0:
                 print(i)
-                plt.ion()
+                # plt.ion()
                 plotTwoFeatures(X, T, self.neuron)
                 print(self._W)
                 print(delta_w)
             if ErrorRate(iter_res, T) < maxErrorRate:
+                plotTwoFeatures(X, T, self.neuron)
+                print(self._W)
                 plotTwoFeatures(X, T, self.neuron)
                 print(ErrorRate(iter_res, T))
                 print("yuhuu")
@@ -68,19 +70,39 @@ def old_neuron(X):
 
 
 if __name__ == '__main__':
-    snl = SNL(2, 1)
-#    iris = np.loadtxt(fname="/Users/jonathandeissler/Documents/NNW/Praktikum/Blatt1/iris.csv", delimiter=",")
+    teil_aufgabe_d = False
+    teil_aufgabe_e = False
+    teil_aufgabe_f = True
 
-#    X = iris[:, :-1]
-#    T = iris[:, -1]
-#    X = X.T
+    if teil_aufgabe_d:
+        snl = SNL(2, 1)
+        X = np.array([[0, 0], [1, 0], [0, 1], [1, 1]])
+        X = X.T
+        T = np.array([0, 0, 0, 1])
 
-    X = np.array([[0, 0], [1, 0], [0, 1], [1, 1]])
-    X = X.T
-    T = np.array([0, 0, 0, 1])
-    print(X.shape)
-    print(T.shape)
-    print(X)
-    print(T)
+        snl.DeltaTrain(X, T, eta=0.01, maxIter=10000, maxErrorRate=0.000001)
 
-    snl.DeltaTrain(X, T, eta=0.01, maxIter=10000, maxErrorRate=0.000001)
+    if teil_aufgabe_e:
+        snl = SNL(2, 1)
+
+        iris = np.loadtxt(fname="/Users/jonathandeissler/Documents/NNW/Praktikum/Blatt1/iris.csv", delimiter=",")
+
+        X = iris[:, :-1]
+        T = iris[:, -1][:100]
+        X = X.T[:2,:100]
+
+        snl.DeltaTrain(X, T, eta=0.01, maxIter=10000, maxErrorRate=0.05)
+
+    if teil_aufgabe_f:
+        snl = SNL(2, 1)
+
+        iris = np.loadtxt(fname="/Users/jonathandeissler/Documents/NNW/Praktikum/Blatt1/iris.csv", delimiter=",")
+
+        X = iris[:, :-1]
+        T = iris[:, -1][50:]
+        T[T == 2] = 0
+        print(T.shape)
+        X = X.T[:2, 50:]
+        print(X.shape)
+
+        snl.DeltaTrain(X, T, eta=0.01, maxIter=1000, maxErrorRate=0.05)
