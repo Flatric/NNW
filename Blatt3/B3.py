@@ -32,9 +32,9 @@ class SNL:
             delta_w = 1 / X.shape[1] * summe
             self._W += delta_w
 
-            summe = np.sum(eta * (T - iter_res) * 1)
+            summe = np.sum(eta * (T - iter_res) * 1,axis=1)
             delta_w = 1 / X.shape[1] * summe
-
+            delta_w = delta_w[np.newaxis].T
             self._b += delta_w
 
             if i % show_iteration == 0:
@@ -74,7 +74,7 @@ def ErrorRate(Y, T):
 if __name__ == '__main__':
     snl = SNL(2, 3)
 
-    iris = np.loadtxt(fname="/Users/jonathandeissler/Documents/NNW/Praktikum/Blatt1/iris.csv", delimiter=",")
+    iris = np.loadtxt(fname="iris.csv", delimiter=",")
 
     X = iris[:, :-1]
     T = iris[:, -1]
