@@ -20,7 +20,7 @@ class SNL:
             net[i] += self._b[0]
         return net > 0
 
-    def DeltaTrain(self, X, T, eta, maxIter, maxErrorRate, show_iteration = 10):
+    def DeltaTrain(self, X, T, eta, maxIter, maxErrorRate):
         plotTwoFeatures(X, T, self.neuron)
         plt.ion()
         for i in range(maxIter):
@@ -35,20 +35,24 @@ class SNL:
 
             self._b += delta_w
 
-            if i % show_iteration == 0:
+            if i % 50 == 0:
                 print(f"Epoch {i}")
                 print(f"Error rate {ErrorRate(iter_res, T)}")
                 plotTwoFeatures(X, T, self.neuron)
                 plt.show()
-
             if ErrorRate(iter_res, T) < maxErrorRate:
                 plotTwoFeatures(X, T, self.neuron)
                 print(self._W)
                 plotTwoFeatures(X, T, self.neuron)
-                print(f"Stop Early target Error rate reached: {ErrorRate(iter_res, T)}")
+                print(ErrorRate(iter_res, T))
+                print("yuhuu")
                 plt.show()
                 return
 
+    def onehot(self, T):
+        e = np.identity(self._W.shape[0])
+        print(e)
+        return e[:, T.astype(int)]
 
 def ErrorRate(Y, T):
     if Y.ndim == 1 or Y.shape[0] == 1:
@@ -60,55 +64,9 @@ def ErrorRate(Y, T):
         return errors.sum() / Y.shape[1]
 
 
-def old_neuron(X):
-    W = [-0.1, 1]
-    schwelle = 0
-    net = np.zeros(X.shape[1])
-
-    for i in range(X.shape[1]):
-        for n in range(2):
-            net[i] += X[n, i] * W[n]
-    return net > schwelle
-
 
 if __name__ == '__main__':
-    teil_aufgabe_d = False
-    teil_aufgabe_e = True
-    teil_aufgabe_f = False
-
-    if teil_aufgabe_d:
-        snl = SNL(2, 1)
-        X = np.array([[0, 0], [1, 0], [0, 1], [1, 1]])
-        X = X.T
-        T = np.array([0, 0, 0, 1])
-
-        snl.DeltaTrain(X, T, eta=0.01, maxIter=10000, maxErrorRate=0.000001)
-
-    if teil_aufgabe_e:
-
-        snl = SNL(2, 1)
-
-        iris = np.loadtxt(fname="/Users/jonathandeissler/Documents/NNW/Praktikum/Blatt1/iris.csv", delimiter=",")
-
-        X = iris[:, :-1]
-        T = iris[:, -1][:100]
-        X = X.T[:2, :100]
-
-        snl.DeltaTrain(X, T, eta=0.005, maxIter=400, maxErrorRate=0.001)
-
-    if teil_aufgabe_f:
-        snl = SNL(2, 1)
-
-        iris = np.loadtxt(fname="/Users/jonathandeissler/Documents/NNW/Praktikum/Blatt1/iris.csv", delimiter=",")
-
-        X = iris[:, :-1]
-        T = iris[:, -1][50:]
-        T[T == 2] = 0
-        print(T.shape)
-        X = X.T[:2, 50:]
-        print(X.shape)
-
-        snl.DeltaTrain(X, T, eta=0.005, maxIter=15000, maxErrorRate=0.05, show_iteration=350)
-
-    plt.show()
+    T = np.array([0, 2, 1, 2])
+    snl = SNL(2, 1)
+    print(snl.onehot(T))
 
