@@ -1,5 +1,5 @@
-import numpy as np
-from Blatt1.nnwplot import plotTwoFeatures
+import numpy as np	
+from nnwplot import plotTwoFeatures
 from matplotlib import pyplot as plt
 
 class SNL:
@@ -8,8 +8,18 @@ class SNL:
         self.dIn = dIn
         self.cOut = cOut
         np.random.seed(42)
-        self._W = np.random.randn(self.dIn) / np.sqrt(dIn - 1)
-        self._b = np.zeros(self.cOut)[np.newaxis].T
+        self._W=np.random.randn(cOut,dIn)/np.sqrt(dIn)
+        self._b=np.zeros(cOut)[np.newaxis].T
+        if cOut==1:
+            self.neuron=self.threshold
+        else:
+            self.neuron=self.thresholdMult
+
+    def netsum(self,X):
+        return self._W.dot(X)+self._b
+
+    def threshold(self,X):
+        return self.netsum(X)>=0    
 
     def neuron(self, X):
         net = np.zeros(X.shape[1])
@@ -54,6 +64,11 @@ class SNL:
         print(e)
         return e[:, T.astype(int)]
 
+    def thresholdMult(self,X):
+        to_onehot = self.netsum(X)
+        return self.onehot(to_onehot)
+
+
 def ErrorRate(Y, T):
     if Y.ndim == 1 or Y.shape[0] == 1:
         errors = Y != T
@@ -67,6 +82,7 @@ def ErrorRate(Y, T):
 
 if __name__ == '__main__':
     T = np.array([0, 2, 1, 2])
-    snl = SNL(2, 1)
+    snl = SNL(4,4)
+    print("thresh", snl.thresholdMult(T))
     print(snl.onehot(T))
 
