@@ -1,4 +1,4 @@
-import numpy as np	
+import numpy as np
 from nnwplot import plotTwoFeatures
 from matplotlib import pyplot as plt
 
@@ -19,7 +19,7 @@ class SNL:
         return self._W.dot(X)+self._b
 
     def threshold(self,X):
-        return self.netsum(X)>=0    
+        return self.netsum(X)>=0
 
     def neuron(self, X):
         net = np.zeros(X.shape[1])
@@ -30,7 +30,7 @@ class SNL:
             net[i] += self._b[0]
         return net > 0
 
-    def DeltaTrain(self, X, T, eta, maxIter, maxErrorRate):
+    def DeltaTrain(self, X, T, eta, maxIter, maxErrorRate, show_iteration = 10):
         plotTwoFeatures(X, T, self.neuron)
         plt.ion()
         for i in range(maxIter):
@@ -45,17 +45,17 @@ class SNL:
 
             self._b += delta_w
 
-            if i % 50 == 0:
+            if i % show_iteration == 0:
                 print(f"Epoch {i}")
                 print(f"Error rate {ErrorRate(iter_res, T)}")
                 plotTwoFeatures(X, T, self.neuron)
                 plt.show()
+
             if ErrorRate(iter_res, T) < maxErrorRate:
                 plotTwoFeatures(X, T, self.neuron)
                 print(self._W)
                 plotTwoFeatures(X, T, self.neuron)
-                print(ErrorRate(iter_res, T))
-                print("yuhuu")
+                print(f"Stop Early target Error rate reached: {ErrorRate(iter_res, T)}")
                 plt.show()
                 return
 
@@ -81,8 +81,18 @@ def ErrorRate(Y, T):
 
 
 if __name__ == '__main__':
-    T = np.array([0, 2, 1, 2])
-    snl = SNL(4,4)
-    print("thresh", snl.thresholdMult(T))
-    print(snl.onehot(T))
+
+
+    snl = SNL(150, 3)
+
+    iris = np.loadtxt(fname="/Users/jonathandeissler/Documents/NNW/Praktikum/Blatt1/iris.csv", delimiter=",")
+
+    X = iris[:, :-1]
+    T = iris[:, -1][50:]
+    print(T.shape)
+    X = X.T[2:, :]
+    print(X.shape)
+
+    snl.DeltaTrain(X, T, eta=0.005, maxIter=15000, maxErrorRate=0.05, show_iteration=350)
+
 
