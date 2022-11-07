@@ -2,41 +2,33 @@ import numpy as np
 from nnwplot import plotTwoFeatures
 from matplotlib import pyplot as plt
 
+
 class SNL:
 
     def __init__(self, dIn: int, cOut: int):
         self.dIn = dIn
         self.cOut = cOut
         np.random.seed(42)
-        self._W=np.random.randn(cOut,dIn)/np.sqrt(dIn)
-        self._b=np.zeros(cOut)[np.newaxis].T
-        if cOut==1:
-            self.neuron=self.threshold
+        self._W = np.random.randn(cOut, dIn) / np.sqrt(dIn)
+        self._b = np.zeros(cOut)[np.newaxis].T
+        if cOut == 1:
+            self.neuron = self.threshold
         else:
-            self.neuron=self.thresholdMult
+            self.neuron = self.thresholdMult
 
-    def netsum(self,X):
-        return self._W.dot(X)+self._b
+    def netsum(self, X):
+        return self._W.dot(X) + self._b
 
-    def threshold(self,X):
-        return self.netsum(X)>=0
+    def threshold(self, X):
+        return self.netsum(X) >= 0
 
-    def neuron(self, X):
-        net = np.zeros(X.shape[1])
-
-        for i in range(X.shape[1]):
-            for n in range(len(self._W)):
-                net[i] += X[n, i] * self._W[n]
-            net[i] += self._b[0]
-        return net > 0
-
-    def DeltaTrain(self, X, T, eta, maxIter, maxErrorRate, show_iteration = 10):
+    def DeltaTrain(self, X, T, eta, maxIter, maxErrorRate, show_iteration=10):
         plotTwoFeatures(X, T, self.neuron)
         plt.ion()
         for i in range(maxIter):
 
             iter_res = self.neuron(X)
-            summe = np.sum(eta * (T - iter_res) * X, axis=1)
+            summe = (eta * (T - iter_res)) @ X.T
             delta_w = 1 / X.shape[1] * summe
             self._W += delta_w
 
@@ -61,12 +53,12 @@ class SNL:
 
     def onehot(self, T):
         e = np.identity(self._W.shape[0])
-        print(e)
         return e[:, T.astype(int)]
 
-    def thresholdMult(self,X):
+    def thresholdMult(self, X):
         to_onehot = self.netsum(X)
-        return self.onehot(to_onehot)
+        res = np.argmax(to_onehot, axis=0)
+        return self.onehot(res)
 
 
 def ErrorRate(Y, T):
@@ -79,20 +71,16 @@ def ErrorRate(Y, T):
         return errors.sum() / Y.shape[1]
 
 
-
 if __name__ == '__main__':
-
-
-    snl = SNL(150, 3)
+    snl = SNL(2, 3)
 
     iris = np.loadtxt(fname="/Users/jonathandeissler/Documents/NNW/Praktikum/Blatt1/iris.csv", delimiter=",")
 
     X = iris[:, :-1]
-    T = iris[:, -1][50:]
+    T = iris[:, -1]
+    T = snl.onehot(T)
     print(T.shape)
     X = X.T[2:, :]
     print(X.shape)
 
     snl.DeltaTrain(X, T, eta=0.005, maxIter=15000, maxErrorRate=0.05, show_iteration=350)
-
-
