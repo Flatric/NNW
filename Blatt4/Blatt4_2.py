@@ -2,6 +2,7 @@ from tensorflow import keras
 import numpy as np
 from nnwplot import plotTwoFeatures
 from matplotlib import pyplot as plt
+import os
 
 def plot_loss(loss,val_loss):
     plt.figure()
@@ -14,14 +15,13 @@ def plotty(epoch,logs):
     if (epoch%100==0):
         plotTwoFeatures(X,T,model.predict)
 
+plt.ion()
+inp = keras.Input(2,) #tupel
 
-input = keras.Input(2,) #tupel
-
-
-a = keras.layers.Dense(units=5, activation="tanh", input_shape=(2,), name="hidden")(input)
+a = keras.layers.Dense(units=5, activation="tanh", input_shape=(2,), name="hidden")(inp)
 out = keras.layers.Dense(units=3, activation="softmax", name="output_layer")(a)
 
-model = keras.models.Model(input, out)
+model = keras.models.Model(inp, out)
 
 model.compile(optimizer="adam", loss="mean_squared_error", metrics=["accuracy"])
 
@@ -31,10 +31,12 @@ X = iris[:, :-1]
 T = iris[:, -1]
 X = X[:, 2:]
 
+
 plot_every_ten = keras.callbacks.LambdaCallback(on_epoch_end=plotty)
 
 myhistory = model.fit(x=X,y=keras.utils.to_categorical(T),epochs=500, callbacks=[plot_every_ten])
 
+plt.ioff()
 plot_loss(myhistory.history['loss'], myhistory.history['accuracy'])
 
 model.summary()
@@ -42,4 +44,6 @@ keras.utils.plot_model(model, to_file="model.png")
 
 
 plotTwoFeatures(X,T,model.predict)
+
+
 
