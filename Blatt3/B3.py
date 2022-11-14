@@ -46,6 +46,7 @@ class SNL:
             if ErrorRate(iter_res, T) < maxErrorRate:
                 plotTwoFeatures(X, T, self.neuron)
                 print(self._W)
+                plt.title(f"error rate: {ErrorRate(iter_res, T)} reached at epoch {i}, with eta = {eta}")
                 plotTwoFeatures(X, T, self.neuron)
                 print(f"Stop Early target Error rate reached: {ErrorRate(iter_res, T)}")
                 plt.show()
@@ -84,3 +85,4 @@ if __name__ == '__main__':
     print(X.shape)
 
     snl.DeltaTrain(X, T, eta=0.005, maxIter=15000, maxErrorRate=0.05, show_iteration=350)
+
