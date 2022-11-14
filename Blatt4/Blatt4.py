@@ -7,9 +7,6 @@ model = keras.models.Sequential()
 model.add(keras.layers.Dense(units=5, activation="tanh", input_shape=(2,), name="hidden1"))
 model.add(keras.layers.Dense(units=3, activation="softmax", name="output_layer"))
 
-
-
-
 model.compile(optimizer="adam", loss="mean_squared_error", metrics=["accuracy"])
 
 iris = np.loadtxt(fname="iris.csv", delimiter=",")
