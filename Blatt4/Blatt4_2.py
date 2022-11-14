@@ -19,7 +19,7 @@ input = keras.Input(2,) #tupel
 
 
 a = keras.layers.Dense(units=5, activation="tanh", input_shape=(2,), name="hidden")(input)
-out = keras.layers.Dense(units=3, activation="softmax", input_shape=(2,), name="output_layer")(a)
+out = keras.layers.Dense(units=3, activation="softmax", name="output_layer")(a)
 
 model = keras.models.Model(input, out)
 
