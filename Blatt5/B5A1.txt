@@ -1,0 +1,25 @@
+b) 28*28 = 784
+c) train_images.shape =>(60000, 28, 28) also Dimension 0
+d) Zielwerte sin  0-9 Kodiert
+    Label	Class
+    0	T-shirt/top
+    1	Trouser
+    2	Pullover
+    3	Dress
+    4	Coat
+    5	Sandal
+    6	Shirt
+    7	Sneaker
+    8	Bag
+    9	Ankle boot
+e) - Ausgabeschicht liefert reelle Werte.
+   - Sie liefert 10 Werte je Eingabe
+   - Ja: die Ausgabe ist jeweils die Wahrscheinlichkeit, dass ein Label vorliegt
+f) SparseCategoricalCrossentropy Begriff: "loss"
+g) 0.91 auf den Trainingsdaten, 0.88 auf den Testdaten
+h) Dauer des Trainierens einer Epoche ca. 4s
+i)  dense_2 (Dense)             (None, 128)               100480
+    dense_3 (Dense)             (None, 10)                1290
+    Total params: 101,770
+    (784 Input + 1 Bias) * 128 + (128 Input + 1 Bias) * 10 = 101.770
+j) Training acc: 0.995, Test acc: 0.978, Trainingszeit je Epoche 4s

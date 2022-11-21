@@ -20,3 +20,5 @@ print(model.summary())
 keras.utils.plot_model(model, to_file="model.png")
 plotTwoFeatures(X,T,model.predict)
 
+
+
