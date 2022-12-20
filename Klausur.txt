@@ -1,0 +1,4 @@
+#A1
+sowohl maria als auch pascal waren sich 100% sicher dass in nnw ne aufgabe dran kommt
+wo man ein cnn das sich aufsplittet und dann wieder zusammen kommt programmieren muss,
+da muss man wohl die funktionale api nutzen weils mit der andern nicht geht
